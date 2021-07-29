@@ -1,0 +1,66 @@
+@import './resets';
+@import './variables';
+
+// Function - Compute values and return values
+@function weight($weight-name) {
+	@return map-get($font-weights, $weight-name);
+}
+
+// Mix-in - Defines styles (e.g. choose between light and dark theme)
+@mixin flexCenter($direction) {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: $direction;
+}
+
+// Light/Dark Theme
+@mixin theme($light-theme: true) {
+	@if $light-theme {
+		background: lighten($primary-color, 100%);
+		color: darken($text-color, 100%);
+	}
+}
+
+// Media Query
+@mixin mobile() {
+	@media (max-width: $mobile) {
+		@content;
+	}
+}
+
+body {
+	background: $primary-color;
+	color: $text-color;
+}
+
+.main {
+	@include flexCenter(row);
+	width: 80% - 40%;
+	margin: 0 auto;
+
+	#{&}__paragraph1 {
+		font-weight: weight(regular);
+
+		&:hover {
+			color: yellow;
+		}
+	}
+
+	// Will repeat CSS from previous paragpraph but allows changes
+	#{&}__paragraph2 {
+		@extend .main__paragraph1;
+
+		&:hover {
+			color: $accent-color;
+		}
+	}
+
+	@include mobile() {
+		flex-direction: column;
+	}
+}
+
+.light {
+	@include theme($light-theme: true);
+}
